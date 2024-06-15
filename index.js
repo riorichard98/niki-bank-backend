@@ -3,26 +3,33 @@ const express = require('express');
 const { Pool } = require('pg');
 const app = express();
 const PORT = process.env.PORT || 3000;
+const {register,login} = require('./usecase/auth')
+const {akun,transferInquiry,transfer} = require('./usecase/akun')
+const {mutasi,gantiPassword,gantiPIN} = require('./usecase/akun2')
 
+const bodyParser = require('body-parser');
+const authMiddleware = require('./authmiddleware'); // Adjust path as needed
 
+// Middleware to parse JSON bodies
+app.use(bodyParser.json());
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: false
 });
 
-app.get('/', async (req, res) => {
-  try {
-    const client = await pool.connect();
-    const result = await client.query('SELECT NOW()');
-    const results = { 'results': (result) ? result.rows : null};
-    res.send(results);
-    client.release();
-  } catch (err) {
-    console.error(err);
-    res.send("Error " + err);
-  }
-});
+app.post('/register',register)
+app.post('/login',login)
+
+// Use the authMiddleware for all routes that require authentication
+app.use(authMiddleware);
+
+app.get('/akun',akun)
+app.post('/tfinquiry',transferInquiry)
+app.post('/tf',transfer)
+app.get('/mutasi',mutasi)
+app.post('/gantipassword',gantiPassword)
+app.post('/gantipin',gantiPIN)
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
