@@ -48,7 +48,7 @@ const register = async (req, res) => {
         // Generate JWT token
         const token = jwt.sign({ userId: insertedId }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-        res.status(200).json({ message: 'User registered successfully', userId: insertedId, token });
+        res.status(200).json({ message: 'User registered successfully'});
 
         client.release(); // Release the client back to the pool
     } catch (err) {
