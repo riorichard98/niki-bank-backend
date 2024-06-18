@@ -9,6 +9,10 @@ const {mutasi,gantiPassword,gantiPIN} = require('./usecase/akun2')
 
 const bodyParser = require('body-parser');
 const authMiddleware = require('./authmiddleware'); // Adjust path as needed
+const cors = require('cors'); // Import the cors package
+
+// Use CORS middleware to allow all origins
+app.use(cors());
 
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());
