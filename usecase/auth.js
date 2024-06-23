@@ -89,7 +89,7 @@ const login = async (req, res) => {
 
         // If email and password are correct, generate JWT token
         const userId = result.rows[0].id;
-        const token = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '10y' });
 
         res.status(200).json({ message: 'Login berhasil', userId, token });
 
